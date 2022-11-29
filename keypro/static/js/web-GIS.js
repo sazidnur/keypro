@@ -12,7 +12,7 @@ L.control.browserPrint({position: 'topright'}).addTo(map);
 
 // go to my location
 $('.go-my-location').click(function(){
-    map.setView([62.6010, 29.7636], 14);
+    map.setView([62.6010, 29.7636], 16);
 })
 
 // my location

@@ -45,25 +45,33 @@
         var lat = e.latlng.lat
         var lng = e.latlng.lng
         console.log(lat)
-        var popup = `<form action="{% url 'add-marker' %}" method="POST">
-                        
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="marker_name">Bookmark Name</label>
-                            <input type="text" name='marker_name' class="form-control" placeholder="Enter marker name">
-                        </div>
-                        
-                        <input type="hidden" name="marker_lat" value="${lat}">
-                        <input type="hidden" name="marker_lng" value ="${lng}">
-                        
-                        <div class="form-group">
-                            <label for="marker_des">Description</label>
-                            <input type="text" class='form-control' name="marker_des" placeholder="Enter marker description">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>`;
+        var popup = `<div class="modal-header p-2 pb-2 border-bottom-0">
+                        <h4 class="fw-bold mb-0">Add Marker</h4>
+                    </div>
+                
+                    <div class="modal-body p-1 pt-0">
+                        <form action="{% url 'add-marker' %}" method="POST">
+                            
+                            {% csrf_token %}
+                            
+                            <input type="hidden" name="marker_lat" value="${lat}">
+                            <input type="hidden" name="marker_lng" value ="${lng}">
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-3" name="marker_name" placeholder="Name">
+                                <label for="marker_name">Name</label>
+                            </div>
+                            
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control form-control-lg rounded-3" name="marker_des" placeholder="Description">
+                                <label for="marker_des">Description</label>
+                            </div>
+                            
+                            <button class="w-100 mb-2 btn btn-md rounded-3 btn-primary" type="submit">Save</button>
+                        </form>
+                    </div>`;
         var marker = L.marker([lat, lng]).bindPopup(popup)
-        marker.addTo(map)
+        marker.addTo(map).openPopup()
     })
 
     {% for element in marker %}
@@ -71,18 +79,29 @@
         var marker_lat = {{element.marker_lat}}
         var marker_lng = {{element.marker_lng}}
 
+        var popup = `<div class="modal-header border-bottom-0 text-wrap">
+                        <h4 class="modal-title fs-5 text-break">{{ element.marker_name }}</h4>
+                    </div>
+                    <div class="modal-body py-0 text-wrap">
+                        <p class="text-break">{{ element.marker_des }}</p>
+                    </div>
+                    <div class="modal-footer flex-column border-top-0">
+                        <form action="delete-marker/{{ element.id }}" method="get" id="delete-button">
+                        <button type="submit" form="delete-button" class="btn btn-md btn-primary w-100 mx-0 mb-2">Delete Marker</button>
+                    </div>`
+
         var marker = L.marker([marker_lat, marker_lng], {draggable: true})
                         .addTo(cluster)
-                        .bindPopup(`<h5>{{ element.marker_name }}</h5> <p>{{ element.marker_des }}</p> <a href="delete-marker/{{ element.id }}">delete</a>`)
+                        .bindPopup(popup)
         
         marker.on("dragend", function(e) {
             this.openPopup()
             var popup = e.target.getPopup();
             var content = popup.getContent();
             
-            var tempArray = content.split("\"");
-            tempArray = tempArray[1].toString().split("/")
-            var marker_id = parseInt(tempArray[1])
+            var tempArray = content.split("delete-marker/");
+            tempArray = tempArray[1].toString().split("\"")
+            var marker_id = parseInt(tempArray[0])
 
             var latlng = e.target.getLatLng();
             var csrf_html_tag = `{% csrf_token %}`
@@ -99,6 +118,14 @@
                     marker_lng: latlng.lng
                 }
             });
+        });
+
+        marker.on('mouseover', function(e) {
+            this.bindTooltip('Drag to update position').openTooltip();
+        });
+
+        marker.on('drag', function(e) {
+            this.unbindTooltip();
         });
         
     {% endfor %}

@@ -26,31 +26,7 @@ map.on('mousemove', function (coordinates) {
 
 var cluster = L.markerClusterGroup({disableClusteringAtZoom: 16})
 cluster.addTo(map)
-// var markers = L.geoJSON(data, {
 
-//     pointToLayer: function (feature, latlng) {
-
-//         var marker = L.marker(latlng, {
-
-//             title: "Resource Location",
-//             alt: "Resource Location",
-//             riseOnHover: true,
-//             draggable: true,
-
-//         }).bindPopup("<input type='button' value='Delete this marker' class='marker-delete-button'/>");
-//         //$.get('https://nominatim.openstreetmap.org/search?format=json&q=' + latlng.lat + ',' + latlng.lng, function (gg) {
-//           //  console.log(gg);
-//        // });
-//         marker.on("popupopen", onPopupOpen);
-
-//         return marker;
-//     }
-// });
-// console.log(markers)
-//markers.addTo(cluster)
-// cluster.addLayer(markers)
-//cluster.addTo(map)
-// layer control
 var baseMaps = {
     'Street View': osm,
     'Satelite View': satelite
@@ -61,59 +37,3 @@ var overLayMaps = {
 }
 
 L.control.layers(baseMaps, overLayMaps, { position: 'bottomright' }).addTo(map)
-// Add marker to map at click location
-//var newMarker = new L.marker(e.latlng, {draggable: true}).addTo(map);
-//newMarker.addTo(cluster).bindPopup("<input type='button' value='Delete this marker' class='marker-delete-button'/>")
-// map.on('click', function addMarker(e) {
-//     var geojsonFeature = {
-//         "type": "Feature",
-//         "properties": {},
-//         "geometry": {
-//             "type": "Point",
-//             "coordinates": [e.latlng.lat, e.latlng.lng]
-//         }
-//     }
-
-//     var marker = L.geoJson(geojsonFeature, {
-
-//         pointToLayer: function (feature, latlng) {
-
-//             var marker = L.marker(e.latlng, {
-
-//                 title: "Resource Location",
-//                 alt: "Resource Location",
-//                 riseOnHover: true,
-//                 draggable: true,
-
-//             }).bindPopup("<input type='button' value='Delete this marker' class='marker-delete-button'/>");
-
-//             marker.on("popupopen", onPopupOpen);
-
-//             return marker;
-//         }
-//     }).addTo(map);
-//      marker.addTo(cluster)
-//      cluster.refreshClusters();
-// });
-
- 
-
-// cluster.on("popupopen", onPopupOpen);
-// function onPopupOpen() {
-
-//     var tempMarker = this;
-//     //console.log(this)
-//     //var tempMarkerGeoJSON = this.toGeoJSON();
-
-//     //var lID = tempMarker._leaflet_id; // Getting Leaflet ID of this marker
-
-//     // To remove marker on click of delete
-//     $(".marker-delete-button:visible").click(function () {
-//         cluster.removeLayer(tempMarker[0]);
-//     });
-// }
-// cluster.on('clusterclick', function (a) {
-// 	// a.layer is actually a cluster
-// 	console.log(a.layer.getAllChildMarkers()[0]);
-// });
-
