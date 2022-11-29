@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Recruitment test assignment - Keypro Map">
+    <meta name="keywords" content="Recruitment, Keypro, Map">
+    <meta name="author" content="Sazid Nur Ratul">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/plugin.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" />
+
+    <title>Keypro Map</title>
+</head>
+
+<body>
+    <!-- Image and text -->
+    
+    {% include 'partials/_sidebar.html' %}
+
+    {% block content %}
+
+    {% endblock %}
+</body>
+
+</html>
+
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+<script src="{% static 'js/plugin.js'%}"></script>
+<script src="{% static 'js/data/test.js'%}"></script>
+<script src="{% static 'js/main.js'%}"></script>
+<script src="{% static 'js/web-GIS.js'%}"></script>
+
+<script>
+    var markers = new L.geoJSON()
+    map.on('click', function(e){
+        var lat = e.latlng.lat
+        var lng = e.latlng.lng
+        console.log(lat)
+        var popup = `<form action="{% url 'add-marker' %}" method="POST">
+                        
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="marker_name">Bookmark Name</label>
+                            <input type="text" name='marker_name' class="form-control" placeholder="Enter marker name">
+                        </div>
+                        
+                        <input type="hidden" name="marker_lat" value="${lat}">
+                        <input type="hidden" name="marker_lng" value ="${lng}">
+                        
+                        <div class="form-group">
+                            <label for="marker_des">Description</label>
+                            <input type="text" class='form-control' name="marker_des" placeholder="Enter marker description">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>`;
+        var marker = L.marker([lat, lng]).bindPopup(popup)
+        marker.addTo(map)
+    })
+
+    {% for element in marker %}
+
+        var marker_lat = {{element.marker_lat}}
+        var marker_lng = {{element.marker_lng}}
+
+        var marker = L.marker([marker_lat, marker_lng], {draggable: true})
+                        .addTo(cluster)
+                        .bindPopup(`<h5>{{ element.marker_name }}</h5> <p>{{ element.marker_des }}</p> <a href="delete-marker/{{ element.id }}">delete</a>`)
+        
+        marker.on("dragend", function(e) {
+            this.openPopup()
+            var popup = e.target.getPopup();
+            var content = popup.getContent();
+            
+            var tempArray = content.split("\"");
+            tempArray = tempArray[1].toString().split("/")
+            var marker_id = parseInt(tempArray[1])
+
+            var latlng = e.target.getLatLng();
+            var csrf_html_tag = `{% csrf_token %}`
+            tempArray = csrf_html_tag.split("\"");
+            var csrftoken = tempArray[5]
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'update-marker' %}",
+                data: {
+                    csrfmiddlewaretoken: csrftoken,
+                    marker_id: marker_id,
+                    marker_lat: latlng.lat,
+                    marker_lng: latlng.lng
+                }
+            });
+        });
+        
+    {% endfor %}
+
+</script>
