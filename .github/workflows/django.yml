@@ -30,4 +30,4 @@ jobs:
         flake8 .
     - name: Run Tests
       run: |
-        python manage.py runserver
+        python manage.py test
