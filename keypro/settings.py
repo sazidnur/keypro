@@ -85,13 +85,6 @@ DATABASES = {
     }
 }
 
-# import dj_database_url
-# db_config = dj_database_url.config(default='postgresql://postgres:jN4By6XS42KrCYGbGR8D@containers-us-west-102.railway.app:6085/railway')
-# db_config['ATOMIC_REQUESTS'] = True
-# DATABASES = {
-#     'default': db_config,
-# }
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
