@@ -24,7 +24,7 @@ map.on('mousemove', function (coordinates) {
 })
 
 
-var cluster = L.markerClusterGroup({disableClusteringAtZoom: 16})
+var cluster = L.markerClusterGroup({disableClusteringAtZoom: 15})
 cluster.addTo(map)
 
 var baseMaps = {
