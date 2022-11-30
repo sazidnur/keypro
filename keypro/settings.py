@@ -75,22 +75,23 @@ WSGI_APPLICATION = 'keypro.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':'keypro',
+        'USER':'postgres',
+        'PASSWORD':'72885',
+        'HOST':'localhost',
+    }
+}
+
+# import dj_database_url
+# db_config = dj_database_url.config(default='postgresql://postgres:jN4By6XS42KrCYGbGR8D@containers-us-west-102.railway.app:6085/railway')
+# db_config['ATOMIC_REQUESTS'] = True
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME':'keypro',
-#         'USER':'postgres',
-#         'PASSWORD':'72885',
-#         'HOST':'localhost',
-#     }
+#     'default': db_config,
 # }
 
-import dj_database_url
-db_config = dj_database_url.config(default='postgresql://postgres:jN4By6XS42KrCYGbGR8D@containers-us-west-102.railway.app:6085/railway')
-db_config['ATOMIC_REQUESTS'] = True
-DATABASES = {
-    'default': db_config,
-}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
