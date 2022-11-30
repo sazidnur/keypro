@@ -10,11 +10,6 @@ L.Control.geocoder().addTo(map);
 // Print Map
 L.control.browserPrint({position: 'topright'}).addTo(map);
 
-// go to my location
-$('.go-my-location').click(function(){
-    map.setView([62.6010, 29.7636], 16);
-})
-
 // my location
 L.control.locate({
     drawCircle: false,
